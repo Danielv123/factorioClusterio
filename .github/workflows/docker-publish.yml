@@ -52,10 +52,14 @@ jobs:
       - name: Extract mod files
         run: |
           docker create $IMAGE_NAME --name image
-          docker cp image:/clusterio/sharedMods/* .
+          docker cp image:/clusterio/sharedMods/* ./mods
           docker rm image
-          ls
+          ls mods
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@master
+        with:
+          path: mods
   # Run tests.
   # See also https://docs.docker.com/docker-hub/builds/automated-testing/
   test:
