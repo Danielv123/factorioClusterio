@@ -50,10 +50,9 @@ jobs:
         run: docker load -i clusterio_docker_image
       
       - name: Extract mod files
-        run: |
-          docker create $IMAGE_NAME --name image
-          docker cp image:/clusterio/sharedMods/* ./mods
-          docker rm image
+        run: IMAGE=docker create $IMAGE_NAME && \
+          docker cp $IMAGE:/clusterio/sharedMods/* ./mods && \
+          docker rm $IMAGE && \
           ls mods
 
       - name: Upload artifact
