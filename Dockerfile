@@ -34,7 +34,9 @@ RUN node packages/lib/build_mod --build --source-dir packages/slave/lua/clusteri
 RUN mv dist/* sharedMods/
 RUN mkdir temp && mkdir temp/test && cp sharedMods/ temp/test/ -r
 
-FROM node:12-alpine
+FROM frolvlad/alpine-glibc
+
+RUN apk add --update bash nodejs npm 
 
 COPY --from=clusterio_builder /clusterio /clusterio
 WORKDIR /clusterio
