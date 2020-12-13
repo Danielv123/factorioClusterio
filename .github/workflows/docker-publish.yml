@@ -35,6 +35,26 @@ jobs:
         with:
           name: clusterio_docker_image
           path: clusterio_docker_image
+  # Upload clusterio_lib and subspace_storage versions
+  upload_mods:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@master
+        with:
+          name: clusterio_docker_image
+          path: .
+
+      - name: Load docker image
+        run: docker load -i clusterio_docker_image
+      
+      - name: Extract mod files
+        run: |
+          docker create $IMAGE_NAME --name image
+          docker cp image:/clusterio/sharedMods/* .
+          docker rm image
+          ls
+
   # Run tests.
   # See also https://docs.docker.com/docker-hub/builds/automated-testing/
   test:
@@ -60,8 +80,6 @@ jobs:
           else
             docker build . --file Dockerfile
           fi
-#            docker-compose --file docker-compose.test.yml build
-
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
   push:
