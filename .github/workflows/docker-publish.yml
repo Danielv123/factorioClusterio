@@ -50,7 +50,7 @@ jobs:
         run: docker load -i clusterio_docker_image
       
       - name: Create container
-        run: IMAGE=$(docker create $IMAGE_NAME --name clusterio_container)
+        run: IMAGE=$(docker create --name clusterio_container $IMAGE_NAME)
       - name: Move mods out of container
         run: docker cp clusterio_container:/clusterio/sharedMods ./mods
       - name: Remove container
