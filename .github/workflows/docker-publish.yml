@@ -47,7 +47,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: clusterio_docker_image
-          path: clusterio_docker_image
+          path: .
 
       - name: Load docker image
         run: docker load -i clusterio_docker_image
@@ -77,7 +77,7 @@ jobs:
         uses: actions/download-artifact@master
         with:
           name: clusterio_docker_image
-          path: clusterio_docker_image
+          path: .
 
       - name: Load docker image
         run: docker load -i clusterio_docker_image
