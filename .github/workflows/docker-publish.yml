@@ -81,6 +81,8 @@ jobs:
 
       - name: Load docker image
         run: docker load -i clusterio_docker_image
+      
+      - name: Tag image
         run: docker tag clusterio_docker_image $IMAGE_NAME
 
 #      - name: Build image
