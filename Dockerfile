@@ -7,13 +7,13 @@ RUN git checkout clusterio-2.0
 RUN npm install
 RUN node build
 
-FROM node:12
+FROM node:12 as clusterio_builder
 RUN apt update
 RUN apt install -y wget
 
 RUN mkdir /clusterio
 WORKDIR /clusterio
-RUN wget -O factorio.tar.gz https://www.factorio.com/get-download/latest/headless/linux64 && tar -xf factorio.tar.gz
+RUN wget -q -O factorio.tar.gz https://www.factorio.com/get-download/latest/headless/linux64 && tar -xf factorio.tar.gz
 # Copy project files into the container
 COPY . .
 
@@ -34,5 +34,9 @@ RUN node packages/lib/build_mod --build --source-dir packages/slave/lua/clusteri
 RUN mv dist/* sharedMods/
 RUN mkdir temp && mkdir temp/test && cp sharedMods/ temp/test/ -r
 RUN ls sharedMods
+
+FROM node:12-alpine
+
+COPY --from=clusterio_builder /clusterio /clusterio
 
 LABEL maintainer "danielv@danielv.no"
