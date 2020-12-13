@@ -37,6 +37,7 @@ jobs:
           path: clusterio_docker_image
   # Upload clusterio_lib and subspace_storage versions
   upload_mods:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
