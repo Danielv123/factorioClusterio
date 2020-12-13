@@ -22,14 +22,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
       - name: Build docker image
         run: docker build . --name $IMAGE_NAME
 
       - name: Export docker image
         run: docker save -o clusterio_docker_image $IMAGE_NAME
 
-      - uses: actions/upload-artifact@master
       - name: Upload artifact
+        uses: actions/upload-artifact@master
         with:
           name: clusterio_docker_image
           path: clusterio_docker_image
@@ -42,7 +43,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/download-artifact@master
+      - name: Download artifact
+        uses: actions/download-artifact@master
         with:
           name: clusterio_docker_image
           path: clusterio_docker_image
@@ -71,7 +73,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/download-artifact@master
+      - name: Download artifact
+        uses: actions/download-artifact@master
         with:
           name: clusterio_docker_image
           path: clusterio_docker_image
