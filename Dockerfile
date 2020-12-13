@@ -1,6 +1,7 @@
 FROM ubuntu
+RUN apt install -y wget
 RUN wget -qO - https://deb.nodesource.com/setup_12.x | sudo -E bash -
-RUN sudo apt install -y nodejs
+RUN apt install -y nodejs
 
 RUN mkdir /clusterio
 WORKDIR /clusterio
