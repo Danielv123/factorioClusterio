@@ -30,7 +30,7 @@ jobs:
       - name: Export docker image
         run: docker save -o clusterio_docker_image $IMAGE_NAME
 
-      - name: Upload artifact
+      - name: Upload docker image
         uses: actions/upload-artifact@master
         with:
           name: clusterio_docker_image
@@ -40,7 +40,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifact
+      - name: Download docker image
         uses: actions/download-artifact@master
         with:
           name: clusterio_docker_image
@@ -49,16 +49,16 @@ jobs:
       - name: Load docker image
         run: docker load -i clusterio_docker_image
       
-      - name: Extract mod files
-        run: IMAGE=$(docker create $IMAGE_NAME)
-      - name: x
-        run: docker cp $IMAGE:/clusterio/sharedMods ./mods
-      - name: yy
-        run: docker rm $IMAGE
-      - name: z
+      - name: Create container
+        run: IMAGE=$(docker create $IMAGE_NAME --name clusterio_container)
+      - name: Move mods out of container
+        run: docker cp clusterio_container:/clusterio/sharedMods ./mods
+      - name: Remove container
+        run: docker rm clusterio_container
+      - name: List extracted mods
         run: ls mods
 
-      - name: Upload artifact
+      - name: Upload mods
         uses: actions/upload-artifact@master
         with:
           path: mods
@@ -71,7 +71,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Download artifact
+      - name: Download docker image
         uses: actions/download-artifact@master
         with:
           name: clusterio_docker_image
