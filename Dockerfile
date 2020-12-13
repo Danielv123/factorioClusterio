@@ -1,23 +1,15 @@
-FROM node:15 as subspace_storage_builder
+FROM node:12 as subspace_storage_builder
 RUN apt update && apt install -y git
-#RUN wget -qO - https://deb.nodesource.com/setup_12.x | bash -
-#RUN apt install -y nodejs
-#RUN wget -O subspace_storage.zip https://github.com/clusterio/factorioClusterioMod/archive/clusterio-2.0.zip
-#RUN unzip subspace_storage.zip -d /subspace_storage
 WORKDIR /
 RUN git clone https://github.com/clusterio/factorioClusterioMod.git
 WORKDIR /factorioClusterioMod
 RUN git checkout clusterio-2.0
 RUN npm install
 RUN node build
-RUN ls
-RUN ls dist
 
-FROM ubuntu
+FROM node:12
 RUN apt update
 RUN apt install -y wget
-RUN wget -qO - https://deb.nodesource.com/setup_12.x | bash -
-RUN apt install -y nodejs
 
 RUN mkdir /clusterio
 WORKDIR /clusterio
