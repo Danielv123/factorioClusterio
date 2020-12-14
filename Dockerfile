@@ -48,6 +48,6 @@ WORKDIR /clusterio
 
 # Install runtime dependencies
 RUN npm install --production
-RUN npx lerna bootstrap --hoist -- --production --no-optional
+RUN npx lerna bootstrap -- --production --no-optional
 RUN npm install mocha
 LABEL maintainer "danielv@danielv.no"
