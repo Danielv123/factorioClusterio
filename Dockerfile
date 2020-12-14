@@ -17,7 +17,7 @@ RUN wget -q -O factorio.tar.gz https://www.factorio.com/get-download/latest/head
 COPY . .
 
 RUN npm install \
-&& npx lerna bootstrap
+&& npx lerna bootstrap --hoist
 
 # Install plugins. This is intended as a reasonable default, enabling plugins to make for fun gameplay.
 # If you want a different set of plugins, consider using this as the base image for your own.
@@ -48,6 +48,6 @@ WORKDIR /clusterio
 
 # Install runtime dependencies
 RUN npm install --production
-RUN npx lerna bootstrap -- --production --no-optional
+RUN npx lerna bootstrap --hoist -- --production --no-optional
 RUN npm install mocha
 LABEL maintainer "danielv@danielv.no"
