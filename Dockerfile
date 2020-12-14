@@ -30,10 +30,11 @@ COPY --from=subspace_storage_builder /factorioClusterioMod/dist/ /clusterio/shar
 RUN npx lerna run build
 # Build Lua library mod
 RUN node packages/lib/build_mod --build --source-dir packages/slave/lua/clusterio_lib \
-mv dist/* sharedMods/ \
+&& mv dist/* sharedMods/ \
 && mkdir temp \
 && mkdir temp/test \
-&& cp sharedMods/ temp/test/ -r
+&& cp sharedMods/ temp/test/ -r \
+&& ls sharedMods
 
 FROM frolvlad/alpine-glibc
 

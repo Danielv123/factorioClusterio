@@ -50,17 +50,21 @@ jobs:
         run: docker load -i clusterio_docker_image
       
       - name: Create container
-        run: IMAGE=$(docker create --name clusterio_container $IMAGE_NAME)
+        run: docker create --name clusterio_container $IMAGE_NAME
+
       - name: Move mods out of container
         run: docker cp clusterio_container:/clusterio/sharedMods ./mods
+
       - name: Remove container
         run: docker rm clusterio_container
+
       - name: List extracted mods
         run: ls mods
 
       - name: Upload mods
         uses: actions/upload-artifact@master
         with:
+          name: mods
           path: mods
   # Run tests.
   # See also https://docs.docker.com/docker-hub/builds/automated-testing/
