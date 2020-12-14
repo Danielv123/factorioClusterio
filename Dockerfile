@@ -36,11 +36,18 @@ RUN node packages/lib/build_mod --build --source-dir packages/slave/lua/clusteri
 && cp sharedMods/ temp/test/ -r \
 && ls sharedMods
 
+# Remove node_modules
+RUN find . -name 'node_modules' -type d -prune -print -exec rm -rf '{}' \;
+
 FROM frolvlad/alpine-glibc
 
-RUN apk add --update bash nodejs npm 
+RUN apk add --update bash nodejs npm
 
 COPY --from=clusterio_builder /clusterio /clusterio
 WORKDIR /clusterio
 
+# Install runtime dependencies
+RUN npm install --production
+RUN npx lerna bootstrap -- --production
+RUN npm install mocha
 LABEL maintainer "danielv@danielv.no"
