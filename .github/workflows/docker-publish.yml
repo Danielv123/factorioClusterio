@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build docker image
-        run: docker build . -t $IMAGE_NAME
+        run: docker build . -t $IMAGE_NAME --target clusterio_final
 
       - name: Export docker image
         run: docker save -o clusterio_docker_image $IMAGE_NAME
@@ -37,6 +37,23 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: clusterio_docker_image
+          path: clusterio_docker_image
+  # Build dependencies and clusterio image with test tooling
+  build_testing:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build docker image
+        run: docker build . -t $IMAGE_NAME --target clusterio_testing
+
+      - name: Export docker image
+        run: docker save -o clusterio_docker_image $IMAGE_NAME
+
+      - name: Upload docker image
+        uses: actions/upload-artifact@master
+        with:
+          name: clusterio_docker_image_testing
           path: clusterio_docker_image
   # Upload clusterio_lib and subspace_storage versions
   upload_mods:
@@ -72,7 +89,7 @@ jobs:
   # Run tests.
   # See also https://docs.docker.com/docker-hub/builds/automated-testing/
   test:
-    needs: build
+    needs: build_testing
     runs-on: ubuntu-latest
 
     steps:
@@ -81,11 +98,11 @@ jobs:
       - name: Download docker image
         uses: actions/download-artifact@master
         with:
-          name: clusterio_docker_image
+          name: clusterio_docker_image_testing
           path: .
 
       - name: Load docker image
-        run: docker load -i clusterio_docker_image
+        run: docker load -i clusterio_docker_image_testing
 
       - name: Run tests
         run: |
