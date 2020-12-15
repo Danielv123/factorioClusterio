@@ -61,3 +61,4 @@ WORKDIR /clusterio
 # Install runtime dependencies
 RUN npm install
 RUN npx lerna bootstrap
+RUN npm install chalk
