@@ -60,4 +60,4 @@ WORKDIR /clusterio
 
 # Install runtime dependencies
 RUN npm install
-RUN npx lerna bootstrap -- --no-optional
+RUN npx lerna bootstrap
