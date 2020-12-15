@@ -48,13 +48,13 @@ jobs:
         run: docker build . -t $IMAGE_NAME --target clusterio_testing
 
       - name: Export docker image
-        run: docker save -o clusterio_docker_image $IMAGE_NAME
+        run: docker save -o clusterio_docker_image_testing $IMAGE_NAME
 
       - name: Upload docker image
         uses: actions/upload-artifact@master
         with:
           name: clusterio_docker_image_testing
-          path: clusterio_docker_image
+          path: clusterio_docker_image_testing
   # Upload clusterio_lib and subspace_storage versions
   upload_mods:
     needs: build
