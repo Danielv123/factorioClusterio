@@ -28,7 +28,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build docker image
-        run: docker build . -t $IMAGE_NAME --target clusterio_final
+        run: DOCKER_BUILDKIT=1 docker build . -t $IMAGE_NAME --target clusterio_final
 
       - name: Export docker image
         run: docker save -o clusterio_docker_image $IMAGE_NAME
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build docker image
-        run: docker build . -t $IMAGE_NAME --target clusterio_testing
+        run: DOCKER_BUILDKIT=1 docker build . -t $IMAGE_NAME --target clusterio_testing
 
       - name: Export docker image
         run: docker save -o clusterio_docker_image_testing $IMAGE_NAME
