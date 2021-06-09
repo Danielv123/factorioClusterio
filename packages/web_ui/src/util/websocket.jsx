@@ -66,6 +66,7 @@ export class Control extends libLink.Link {
 		this.instanceUpdateHandlers = new Map();
 		this.saveListUpdateHandlers = new Map();
 		this.instanceLogHandlers = new Map();
+		this.slaveLogHandlers = new Map();
 
 		this.connector.on("connect", data => {
 			this.accountName = data.account.name;
@@ -270,6 +271,12 @@ export class Control extends libLink.Link {
 				handler(info);
 			}
 		}
+		if (info.slave_id !== undefined) {
+			let slaveHandlers = this.slaveLogHandlers.get(info.slave_id)
+			for (let handler of slaveHandlers || []) {
+				handler(info);
+			}
+		}
 	}
 
 	async onInstanceLog(id, handler) {
@@ -307,6 +314,41 @@ export class Control extends libLink.Link {
 		}
 	}
 
+	async onSlaveLog(id, handler) {
+		if (!Number.isInteger(id)) {
+			throw new Error("Invalid slave id");
+		}
+
+		let handlers = this.slaveLogHandlers.get(id);
+		if (!handlers) {
+			handlers = [];
+			this.slaveLogHandlers.set(id, handlers);
+		}
+
+		handlers.push(handler);
+
+		if (handlers.length === 1) {
+			await this.updateLogSubscriptions();
+		}
+	}
+
+	async offSlaveLog(id, handler) {
+		let handlers = this.slaveLogHandlers.get(id);
+		if (!handlers || !handlers.length) {
+			throw new Error(`No handlers for slave ${id} exist`);
+		}
+
+		let index = handlers.lastIndexOf(handler);
+		if (index === -1) {
+			throw new Error(`Given handler is not registered for slave ${id}`);
+		}
+
+		handlers.splice(index, 1);
+		if (!handlers.length) {
+			await this.updateLogSubscriptions();
+		}
+	}
+
 	async updateLogSubscriptions() {
 		if (!this.connector.connected) {
 			return;
@@ -315,7 +357,7 @@ export class Control extends libLink.Link {
 		await libLink.messages.setLogSubscriptions.send(this, {
 			all: false,
 			master: false,
-			slave_ids: [],
+			slave_ids: [...this.slaveLogHandlers.keys()],
 			instance_ids: [...this.instanceLogHandlers.keys()],
 			max_level: null,
 		});

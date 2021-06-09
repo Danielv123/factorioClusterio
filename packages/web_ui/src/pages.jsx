@@ -2,6 +2,7 @@ import React from "react";
 
 import MasterPage from "./components/MasterPage";
 import SlavesPage from "./components/SlavesPage";
+import SlaveViewPage from "./components/SlaveViewPage";
 import InstancesPage from "./components/InstancesPage";
 import InstanceViewPage from "./components/InstanceViewPage";
 import UsersPage from "./components/UsersPage";
@@ -15,6 +16,7 @@ import PluginViewPage from "./components/PluginViewPage";
 export const pages = [
 	{ path: "/master", sidebarName: "Master", content: <MasterPage /> },
 	{ path: "/slaves", sidebarName: "Slaves", content: <SlavesPage /> },
+	{ path: "/slaves/:id/view", sidebarPath: "/slaves", content: <SlaveViewPage /> },
 	{ path: "/instances", sidebarName: "Instances", content: <InstancesPage />},
 	{ path: "/instances/:id/view", sidebarPath: "/instances", content: <InstanceViewPage /> },
 	{ path: "/users", sidebarName: "Users", content: <UsersPage /> },

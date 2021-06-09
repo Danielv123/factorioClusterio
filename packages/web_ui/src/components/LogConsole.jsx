@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useRef, useState } from "react";
-import { Typography } from "antd";
+import { Checkbox, Typography } from "antd";
 
 import libLink from "@clusterio/lib/link";
 
@@ -37,22 +37,29 @@ function formatParsedOutput(parsed, key) {
 		info = <>[<span className="factorio-action">{parsed.action}</span>] </>;
 	}
 
-	return <span key={key}>{time}{info}{parsed.message}<br/></span>;
+	return <span key={key}>{time}{info}{parsed.message}<br /></span>;
 }
 
 function formatLog(info, key) {
 	if (info.level === "server" && info.parsed) {
-		return formatParsedOutput(info.parsed, key);
+		return {
+			info,
+			component: formatParsedOutput(info.parsed, key),
+		};
 	}
 	let level = <span className={`log-${info.level}`}>{info.level}</span>;
-	return <span key={key}>[{level}] {info.message}<br/></span>;
+	return {
+		info,
+		component: <span key={key}>[{level}] {info.message}<br /></span>,
+	}
 }
 
-export default function InstanceConsole(props) {
+export default function LogConsole(props) {
 	let control = useContext(ControlContext);
 	let anchor = useRef();
-	let [pastLines, setPastLines] = useState([<span key={0}>{"Loading past entries..."}<br/></span>]);
+	let [pastLines, setPastLines] = useState([<span key={0}>{"Loading past entries..."}<br /></span>]);
 	let [lines, setLines] = useState([]);
+	let [filterInstanceLogs, setFilterInstanceLogs] = useState(!!props.slaveIds)
 
 	useEffect(() => {
 		// Scroll view to the anchor so it sticks to the bottom
@@ -62,13 +69,13 @@ export default function InstanceConsole(props) {
 		libLink.messages.queryLog.send(control, {
 			all: false,
 			master: false,
-			slave_ids: [],
-			instance_ids: [props.id],
+			slave_ids: props.slaveIds || [],
+			instance_ids: props.instanceIds || [],
 			max_level: null,
 		}).then(result => {
 			setPastLines(result.log.slice(-400).map((info, index) => formatLog(info, index)));
 		}).catch(err => {
-			setPastLines([<span key={0}>{`Error loading log: ${err.message}`}<br/></span>]);
+			setPastLines([<span key={0}>{`Error loading log: ${err.message}`}<br /></span>]);
 		});
 
 		function logHandler(info) {
@@ -77,18 +84,30 @@ export default function InstanceConsole(props) {
 			));
 		}
 
-		control.onInstanceLog(props.id, logHandler);
+		props.instanceIds?.forEach(id => control.onInstanceLog(id, logHandler));
+		props.slaveIds?.forEach(id => control.onSlaveLog(id, logHandler));
 		return () => {
-			control.offInstanceLog(props.id, logHandler);
+			props.instanceIds?.forEach(id => control.offInstanceLog(id, logHandler));
+			props.slaveIds?.forEach(id => control.offSlaveLog(id, logHandler));
 		};
 	}, [props.id]);
 
 	return <>
 		<Paragraph code className="instance-console">
-			{pastLines}
-			{lines}
+			{pastLines
+				.filter(line => filterInstanceLogs ? !line.info?.instance_id : true)
+				.map(line => line.component)
+			}
+			{lines
+				.filter(line => filterInstanceLogs ? !line.info?.instance_id : true)
+				.map(line => line.component)
+			}
 			<div className="scroll-anchor" ref={anchor} />
 		</Paragraph>
+		{props.slaveIds && <><Checkbox
+			checked={filterInstanceLogs}
+			onChange={e => setFilterInstanceLogs(e.target.checked)}
+		/> Filter out instance logs</>}
 	</>;
 }
 

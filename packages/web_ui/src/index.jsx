@@ -14,7 +14,7 @@ export { default as InstanceConfigTree } from "./components/InstanceConfigTree";
 export { default as MasterConfigTree } from "./components/MasterConfigTree";
 
 export { default as AssignInstanceModal } from "./components/AssignInstanceModal";
-export { default as InstanceConsole } from "./components/InstanceConsole";
+export { default as LogConsole } from "./components/LogConsole";
 export { default as InstanceRcon } from "./components/InstanceRcon";
 
 export { default as PageLayout } from "./components/PageLayout";

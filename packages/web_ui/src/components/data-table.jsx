@@ -136,7 +136,7 @@ class DataTable extends Component {
 				};
 				return {
 					onClick: event => {
-						if (event.target.type !== "button") {
+						if (event.target.type !== "button" && event.target.parentElement.type !== "button") {
 							if (this.props.Editable) { this.showEditModal(record, rowIndex); }
 							if (externalOnRow.onClick) { externalOnRow.onClick(event); }
 						}

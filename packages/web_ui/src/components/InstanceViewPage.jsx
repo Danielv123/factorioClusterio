@@ -8,7 +8,7 @@ import libLink from "@clusterio/lib/link";
 import ControlContext from "./ControlContext";
 import PageLayout from "./PageLayout";
 import InstanceConfigTree from "./InstanceConfigTree";
-import InstanceConsole from "./InstanceConsole";
+import LogConsole from "./LogConsole";
 import InstanceRcon from "./InstanceRcon";
 import AssignInstanceModal from "./AssignInstanceModal";
 import StartStopInstanceButton from "./StartStopInstanceButton";
@@ -116,7 +116,7 @@ export default function InstanceViewPage(props) {
 
 		<SavesList instance={instance} />
 		<Title level={5} style={{ marginTop: 16 }}>Console</Title>
-		<InstanceConsole id={instanceId} />
+		<LogConsole instanceIds={[instanceId]} />
 		<InstanceRcon id={instanceId} disabled={instance["status"] !== "running"} />
 
 		<InstanceConfigTree id={instanceId} />
