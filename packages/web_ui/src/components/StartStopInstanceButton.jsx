@@ -8,7 +8,7 @@ import { notifyErrorHandler } from "../util/notify";
 import { useInstance } from "../model/instance";
 
 /**
- * Start/stopp instance button. 
+ * Start/stopp instance button.
  * @param {Object} props Requires either instanceId or instance
  * @param {Number?} props.instanceId - Instance ID number
  * @param {JSX.Element?} props.instance - Instance component from model/instance/useInstance
@@ -17,7 +17,7 @@ import { useInstance } from "../model/instance";
 export default function StartStopInstanceButton(props) {
 	let control = useContext(ControlContext);
 	let [switching, setSwitching] = useState(false);
-	let instance = props.instance
+	let instance = props.instance;
 	if (!instance) {
 		[instance] = useInstance(props.instanceId);
 	}

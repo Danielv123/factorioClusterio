@@ -1,13 +1,13 @@
 import React, { useContext, useState } from "react";
 import { Table, Button, Popover, Space } from "antd";
 import PlusOutlined from "@ant-design/icons/PlusOutlined";
-import { useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom";
 
 import ControlContext from "./ControlContext";
 import PageLayout from "./PageLayout";
 import { useSlaveList } from "../model/slave";
-import SlaveConfigCreateModal from "./SlaveConfigCreateModal"
-import { QuestionCircleOutlined } from "@ant-design/icons"
+import SlaveConfigCreateModal from "./SlaveConfigCreateModal";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import Paragraph from "antd/lib/typography/Paragraph";
 
 
@@ -44,8 +44,8 @@ export default function SlavesPage() {
 			pagination={false}
 			onRow={(record) => ({
 				onClick: () => {
-					history.push(`/slaves/${record.id}/view`)
-				}
+					history.push(`/slaves/${record.id}/view`);
+				},
 			})}
 		/>
 		<Button type="primary" onClick={() => setShowModal(true)}>
@@ -57,7 +57,7 @@ export default function SlavesPage() {
 				<Space
 					direction="vertical"
 					style={{
-						maxWidth: 700
+						maxWidth: 700,
 					}}
 				>
 					<Paragraph>

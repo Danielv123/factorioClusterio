@@ -51,7 +51,7 @@ function formatLog(info, key) {
 	return {
 		info,
 		component: <span key={key}>[{level}] {info.message}<br /></span>,
-	}
+	};
 }
 
 export default function LogConsole(props) {
@@ -59,7 +59,7 @@ export default function LogConsole(props) {
 	let anchor = useRef();
 	let [pastLines, setPastLines] = useState([<span key={0}>{"Loading past entries..."}<br /></span>]);
 	let [lines, setLines] = useState([]);
-	let [filterInstanceLogs, setFilterInstanceLogs] = useState(!!props.slaveIds)
+	let [filterInstanceLogs, setFilterInstanceLogs] = useState(Boolean(props.slaveIds));
 
 	useEffect(() => {
 		// Scroll view to the anchor so it sticks to the bottom
@@ -95,11 +95,11 @@ export default function LogConsole(props) {
 	return <>
 		<Paragraph code className="instance-console">
 			{pastLines
-				.filter(line => filterInstanceLogs ? !line.info?.instance_id : true)
+				.filter(line => (filterInstanceLogs ? !line.info?.instance_id : true))
 				.map(line => line.component)
 			}
 			{lines
-				.filter(line => filterInstanceLogs ? !line.info?.instance_id : true)
+				.filter(line => (filterInstanceLogs ? !line.info?.instance_id : true))
 				.map(line => line.component)
 			}
 			<div className="scroll-anchor" ref={anchor} />

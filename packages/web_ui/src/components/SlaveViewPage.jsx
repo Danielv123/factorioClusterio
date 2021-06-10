@@ -8,7 +8,7 @@ import ControlContext from "./ControlContext";
 import PageLayout from "./PageLayout";
 import LogConsole from "./LogConsole";
 import StartStopInstanceButton from "./StartStopInstanceButton";
-import DataTable from "./data-table"
+import DataTable from "./data-table";
 import { useSlave } from "../model/slave";
 
 const { Title, Paragraph } = Typography;
@@ -77,9 +77,9 @@ export default function SlaveViewPage(props) {
 				dataIndex: "actions",
 				title: "Actions",
 				render: (_, record) => {
-					console.log(record)
-					return <StartStopInstanceButton instanceId={record.key} />
-				}
+					console.log(record);
+					return <StartStopInstanceButton instanceId={record.key} />;
+				},
 			}]}
 		/>
 
